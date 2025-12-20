@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Capoeira Muzenza Saint-Ouen | Professeur Fino</title>
+    <meta name="description" content="Groupe de Capoeira Muzenza à Saint-Ouen. Cours enfants, ados et adultes.">
+    <meta name="theme-color" content="#080808">
+    
+    <link rel="icon" href="https://muzenza.com.br/site/wp-content/uploads/2020/01/Grupo-Muzenza-Capoeira-Logo.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. VARIABLES & PALETTES --- */
+        :root {
+            --accent-color: #d00000;
+            --white: #ffffff;
+            
+            /* THÈME SOMBRE (Base) */
+            --bg-body: #080808;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #080808 60%);
+            --card-bg: #141414;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --border-color: rgba(255,255,255,0.08);
+            --modal-bg: #1a1a1a;
+            --input-bg: #2a2a2a;
+            --schedule-hover: rgba(255,255,255,0.05);
+        }
+
+        /* THÈME CLAIR (Lumineux) */
+        body.light-mode {
+            --bg-body: #ffffff;
+            --bg-gradient: none;
+            --card-bg: #f3f4f6;
+            --text-main: #111111;
+            --text-muted: #555555;
+            --border-color: rgba(0,0,0,0.06);
+            --modal-bg: #ffffff;
+            --input-bg: #ffffff;
+            --schedule-hover: rgba(0,0,0,0.03);
+        }
+
+        /* --- 2. PROTECTION & QoL --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: default; }
+        input, textarea, select { -webkit-user-select: text; user-select: text; }
+        img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+
+        /* --- 3. DESIGN GÉNÉRAL --- */
+        body {
+            background-color: var(--bg-body);
+            background-image: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 1; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- 4. UI COMPONENTS --- */
+        .theme-toggle {
+            position: absolute; top: 20px; right: 20px;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            color: var(--text-main); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 100; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .theme-toggle:hover { transform: scale(1.1); border-color: var(--accent-color); }
+
+        .grid-container {
+            width: 100%; max-width: 1300px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(220px, auto); gap: 20px; padding: 20px 0;
+        }
+
+        .card {
+            background-color: var(--card-bg); border-radius: 24px; padding: 30px;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .card:hover { transform: translateY(-5px); border-color: rgba(208, 0, 0, 0.3); z-index: 2; }
+
+        /* --- 5. CONTENU SPÉCIFIQUE --- */
+        .hero-card {
+            grid-column: span 2; grid-row: span 2;
+            justify-content: center; align-items: center; text-align: center; color: white;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1517520037367-758fa4922e37?q=80&w=2000&auto=format&fit=crop') center/cover;
+        }
+        .logo-img { max-width: 160px; margin-bottom: 25px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); animation: float 6s ease-in-out infinite; }
+        .hero-text h1 { font-size: 3.5rem; margin-bottom: 10px; letter-spacing: -1px; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        .hero-text h2 { font-size: 1rem; color: var(--accent-color); margin-bottom: 15px; letter-spacing: 3px; font-weight: 600; }
+        .hero-sub { font-size: 0.9rem; opacity: 0.9; max-width: 80%; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px; }
+
+        .prof-card { grid-column: span 1; grid-row: span 2; padding: 0; color: white; }
+        .prof-bg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .prof-card:hover .prof-bg { transform: scale(1.05); }
+        .prof-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, transparent); padding: 30px 20px 20px; }
+        .prof-tag { position: absolute; top: 20px; right: 20px; background: rgba(208,0,0,0.9); backdrop-filter: blur(4px); color: white; padding: 6px 14px; border-radius: 50px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+
+        /* PLANNING */
+        .schedule-card { grid-column: span 1; grid-row: span 2; }
+        .schedule-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border-color); }
+        .status-dot { height: 10px; width: 10px; border-radius: 50%; background-color: #ccc; display: inline-block; margin-right: 5px; }
+        .status-open { background-color: #2ecc71; box-shadow: 0 0 10px #2ecc71; }
+        .status-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); }
+        
+        /* Ajustement hauteur liste pour le scrolling */
+        .schedule-list { 
+            list-style: none; display: flex; flex-direction: column; gap: 8px; 
+            max-height: 400px; overflow-y: auto; padding-right: 5px;
+        }
+        /* Scrollbar custom */
+        .schedule-list::-webkit-scrollbar { width: 4px; }
+        .schedule-list::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
+
+        .schedule-item { padding: 12px; border-radius: 12px; background: var(--bg-body); border-left: 3px solid transparent; transition: 0.2s; }
+        .schedule-item:hover { background: var(--schedule-hover); }
+        .schedule-item.active { border-left: 3px solid var(--accent-color); background: rgba(208, 0, 0, 0.08); }
+        
+        .day-name { display: block; color: var(--text-main); font-weight: 700; font-size: 1rem; font-family: 'Oswald', sans-serif;}
+        .class-info { margin-bottom: 4px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
+        .class-info:last-child { border-bottom: none; padding-bottom: 0; }
+        .class-time { font-size: 0.85rem; color: var(--accent-color); font-weight: 600; display: inline-block; margin-right: 5px; }
+        .class-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+        .map-link { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 6px; cursor: pointer; text-decoration: underline; text-decoration-color: transparent; transition: 0.2s; }
+        .map-link:hover { color: var(--text-main); text-decoration-color: var(--accent-color); }
+        .map-link i { margin-right: 4px; font-size: 0.7rem; color: var(--accent-color); }
+
+        .contact-card { grid-column: span 2; background-color: var(--accent-color); color: white; justify-content: center; align-items: center; text-align: center; cursor: pointer; }
+        .contact-card:hover { background-color: #b00000; }
+        .email-display { padding: 10px 25px; background: rgba(0,0,0,0.2); border-radius: 50px; font-family: monospace; font-size: 1rem; margin-top: 15px; border: 1px solid rgba(255,255,255,0.2); display: inline-flex; align-items: center; gap: 10px; }
+
+        .social-card { grid-column: span 1; flex-direction: row; justify-content: space-evenly; align-items: center; }
+        .social-icon { font-size: 1.8rem; color: var(--text-muted); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg-body); transition: 0.3s; }
+        .social-icon:hover { color: white; background: var(--accent-color); transform: translateY(-3px); }
+
+        .history-card { grid-column: span 1; text-align: center; justify-content: center; }
+        .year-big { font-size: 4rem; font-weight: 700; color: transparent; -webkit-text-stroke: 2px var(--text-muted); opacity: 0.2; font-family: 'Oswald', sans-serif; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; }
+        .history-content { z-index: 1; position: relative;}
+
+        .supervision-card { grid-column: span 2; flex-direction: row; align-items: center; justify-content: space-around; padding: 0 40px; }
+        .sup-item { text-align: left; padding-left: 15px; border-left: 3px solid var(--accent-color); }
+        .sup-role { font-size: 0.7rem; text-transform: uppercase; color: var(--accent-color); font-weight: 700; display: block; }
+        .sup-name { font-size: 1.3rem; font-weight: 600; color: var(--text-main); font-family: 'Oswald', sans-serif;}
+
+        /* --- 6. MODAL & TOAST --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--modal-bg); padding: 30px; border-radius: 24px; width: 90%; max-width: 400px; border: 1px solid var(--border-color); transform: translateY(20px); transition: transform 0.3s; color: var(--text-main); }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-title { font-family: 'Oswald'; font-size: 1.5rem; margin-bottom: 20px; color: var(--text-main); }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: var(--text-muted); }
+        .form-input, .form-select { width: 100%; padding: 12px; border-radius: 12px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); font-family: 'Inter'; outline: none; transition: 0.3s;}
+        .form-input:focus { border-color: var(--accent-color); }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-modal { flex: 1; padding: 12px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-family: 'Inter'; transition: 0.2s;}
+        .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+        .btn-send { background: var(--accent-color); color: white; }
+        .btn-send:hover { background: #b00000; }
+        .copy-link { text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+        
+        .toast { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2ecc71; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; font-weight: bold; opacity: 0; pointer-events: none; transition: 0.3s; margin-bottom: -10px; z-index: 1001; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .toast.show { opacity: 1; margin-bottom: 0; }
+
+        /* --- 7. RESPONSIVE --- */
+        @media (max-width: 900px) {
+            body { display: block; padding: 10px; }
+            .theme-toggle { top: 15px; right: 15px; }
+            .grid-container { grid-template-columns: 1fr; gap: 12px; }
+            .card { padding: 25px; border-radius: 20px; }
+            .hero-card, .prof-card, .schedule-card, .supervision-card, .contact-card, .history-card, .social-card { grid-column: span 1; grid-row: auto; min-height: auto; }
+            .hero-card { padding: 60px 20px; min-height: 380px; }
+            .hero-text h1 { font-size: 3rem; }
+            .prof-card { min-height: 400px; }
+            .supervision-card { flex-direction: column; align-items: flex-start; gap: 20px; padding: 30px; }
+            .email-display { font-size: 0.8rem; padding: 10px 15px; }
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" id="themeBtn" title="Changer le thème">
+        <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <div class="grid-container">
+
+        <div class="card hero-card">
+            <img src="https://muzenza.com.br/site/wp-content/uploads/2020/01/Grupo-Muzenza-Capoeira-Logo.png" alt="Logo Muzenza" class="logo-img">
+            <div class="hero-text">
+                <h2>Groupe International</h2>
+                <h1>Muzenza<br>Saint-Ouen</h1>
+                <div class="hero-sub">
+                    <p>Culture • Sport • Art Martial Brésilien</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card prof-card">
+            <div class="prof-tag">Le Professeur</div>
+            <img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=1000&auto=format&fit=crop" alt="Professeur Fino" class="prof-bg">
+            <div class="prof-overlay">
+                <h3>Professeur Fino</h3>
+                <p style="font-size: 0.85rem; color: #ddd;">Enseignement technique & Pédagogie</p>
+            </div>
+        </div>
+
+        <div class="card schedule-card">
+            <div class="schedule-header">
+                <h3>Planning</h3>
+                <div>
+                    <span id="status-dot" class="status-dot"></span>
+                    <span id="status-text" class="status-text">Fermé</span>
+                </div>
+            </div>
+            <ul class="schedule-list">
+                
+                <li class="schedule-item" data-day="1">
+                    <span class="day-name">LUNDI</span>
+                    <div class="class-info">
+                        <span class="class-time">19h30 - 22h00</span>
+                        <span class="class-desc">Cours Avancé</span>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=2+Rue+de+l'Alliance+Saint+Ouen" target="_blank" class="map-link">
+                        <i class="fa-solid fa-location-dot"></i> 2 Rue de l'Alliance
+                    </a>
+                </li>
+
+                <li class="schedule-item" data-day="2">
+                    <span class="day-name">MARDI</span>
+                    <div class="class-info">
+                        <span class="class-time">18h00 - 19h00</span>
+                        <span class="class-desc">Baby (3-6 ans)</span>
+                    </div>
+                    <div class="class-info">
+                        <span class="class-time">19h00 - 20h00</span>
+                        <span class="class-desc">Enfants (7 ans +)</span>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Gymnase+Alice+Milliat+32+boulevard+Biron+Saint+Ouen" target="_blank" class="map-link">
+                        <i class="fa-solid fa-location-dot"></i> Gymnase Alice Milliat (32 Bd Biron)
+                    </a>
+                </li>
+
+                <li class="schedule-item" data-day="3">
+                    <span class="day-name">MERCREDI</span>
+                    <div class="class-info">
+                        <span class="class-time">17h00 - 17h45</span>
+                        <span class="class-desc">Baby (3-6 ans)</span>
+                    </div>
+                    <div class="class-info">
+                        <span class="class-time">17h45 - 18h30</span>
+                        <span class="class-desc">Enfants (7-11 ans)</span>
+                    </div>
+                    <div class="class-info">
+                        <span class="class-time">18h30 - 19h30</span>
+                        <span class="class-desc">12 ans + / Avancés</span>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=8+Rue+Pierre+Curie+Saint+Ouen" target="_blank" class="map-link">
+                        <i class="fa-solid fa-location-dot"></i> 8 Rue Pierre Curie
+                    </a>
+                </li>
+
+                <li class="schedule-item" data-day="5">
+                    <span class="day-name">VENDREDI</span>
+                    <div class="class-info">
+                        <span class="class-time">19h00 - 20h00</span>
+                        <span class="class-desc">Parents / Enfants</span>
+                    </div>
+                    <div class="class-info">
+                        <span class="class-time">20h00 +</span>
+                        <span class="class-desc">Ados / Adultes</span>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Gymnase+Alice+Milliat+32+boulevard+Biron+Saint+Ouen" target="_blank" class="map-link">
+                        <i class="fa-solid fa-location-dot"></i> Gymnase Alice Milliat (32 Bd Biron)
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="card supervision-card">
+            <div class="sup-item">
+                <span class="sup-role">Supervision</span>
+                <span class="sup-name">Mestre Burguês</span>
+            </div>
+            <div class="sup-item">
+                <span class="sup-role">Direction</span>
+                <span class="sup-name">Mestre San</span>
+            </div>
+        </div>
+
+        <div class="card history-card">
+            <span class="year-big">1972</span>
+            <div class="history-content">
+                <h4>Fondation</h4>
+                <p>Rio de Janeiro</p>
+            </div>
+        </div>
+
+        <div class="card social-card">
+            <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+
+        <div class="card contact-card" onclick="openContactModal()">
+            <h3>Rejoignez-nous</h3>
+            <p>Cliquez pour nous écrire</p>
+            <div class="email-wrapper">
+                <div class="email-display">
+                    <i class="fa-regular fa-paper-plane"></i>
+                    Contact & Inscription
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Préparez votre mail</h3>
+            
+            <div class="form-group">
+                <label class="form-label">Votre Nom</label>
+                <input type="text" id="userName" class="form-input" placeholder="Ex: Jean Dupont">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Âge de l'adhérent</label>
+                <input type="number" id="userAge" class="form-input" placeholder="Ex: 10 ans ou Adulte">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Sujet</label>
+                <select id="userSubject" class="form-select">
+                    <option value="Demande d'informations">Demande d'informations</option>
+                    <option value="Cours d'essai">Inscription cours d'essai</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Lieu & Date souhaitée (optionnel)</label>
+                <input type="text" id="userLoc" class="form-input" placeholder="Ex: Lundi prochain à l'Alliance">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" onclick="closeContactModal()">Annuler</button>
+                <button class="btn-modal btn-send" onclick="sendFormattedMail()">Ouvrir mon Mail</button>
+            </div>
+
+            <div class="copy-link" onclick="justCopyEmail()">Ou copier simplement l'adresse</div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Email copié !</div>
+
+    <script>
+        // --- 1. SÉCURITÉ ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // --- 2. GESTION DU THÈME ---
+        const themeBtn = document.getElementById('themeBtn');
+        const icon = themeBtn.querySelector('i');
+        const body = document.body;
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+                enableLightMode();
+            }
+        }
+
+        function enableLightMode() {
+            body.classList.add('light-mode');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        function enableDarkMode() {
+            body.classList.remove('light-mode');
+            icon.classList.replace('fa-sun', 'fa-moon');
+        }
+
+        themeBtn.addEventListener('click', () => {
+            if (body.classList.contains('light-mode')) {
+                enableDarkMode();
+                localStorage.setItem('theme', 'dark');
+            } else {
+                enableLightMode();
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        initTheme();
+
+        // --- 3. MODAL ---
+        const modal = document.getElementById('contactModal');
+        function openContactModal() { modal.classList.add('active'); }
+        function closeContactModal() { modal.classList.remove('active'); }
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeContactModal(); });
+
+        // --- 4. MAIL ---
+        function sendFormattedMail() {
+            const name = document.getElementById('userName').value || "Futur Adhérent";
+            const age = document.getElementById('userAge').value || "Non précisé";
+            const subjectType = document.getElementById('userSubject').value;
+            const loc = document.getElementById('userLoc').value;
+            const email = "muzenza.capoeira.saintouen@gmail.com";
+            
+            let subject = `[SITE] ${subjectType} - ${name}`;
+            let body = `Bonjour Professeur Fino,\n\nJe souhaiterais des informations pour le groupe Muzenza Saint-Ouen.\n\n`;
+            body += `📋 INFO ADHÉRENT :\n- Nom : ${name}\n- Âge : ${age}\n`;
+            if(loc) body += `- Intérêt : ${loc}\n`;
+            body += `\nMerci et à bientôt !`;
+
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            closeContactModal();
+        }
+
+        function justCopyEmail() {
+            const email = "muzenza.capoeira.saintouen@gmail.com";
+            navigator.clipboard.writeText(email).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+                closeContactModal();
+            });
+        }
+
+        // --- 5. ANIMATIONS & DATE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const date = new Date();
+            const day = date.getDay(); // 0 Dimanche - 1 Lundi - 2 Mardi etc.
+            const items = document.querySelectorAll('.schedule-item');
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            
+            let isOpenToday = false;
+
+            items.forEach(item => {
+                const classDay = parseInt(item.getAttribute('data-day'));
+                if (day === classDay) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    isOpenToday = true;
+                }
+            });
+
+            if (isOpenToday) {
+                statusDot.classList.add('status-open');
+                statusText.innerText = "COURS CE SOIR";
+                statusText.style.color = "#2ecc71";
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => observer.observe(card), index * 50);
+            });
+        });
+    </script>
+</body>
+</html>
