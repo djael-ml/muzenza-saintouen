@@ -5,7 +5,7 @@ const translations = {
         "hero_sub": "Culture • Sport • Art Martial Brésilien",
         "prof_tag": "Le Contre-maître",
         "prof_name": "Contre-maître Fino",
-        "prof_desc": "Enseignement technique & Pédagogie",
+        "prof_desc": "Enseignement technique & Pédagogique",
         "schedule_title": "Planning des Cours",
         "status_open": "COURS CE SOIR",
         "status_closed": "VÉRIFIEZ LE PLANNING",
@@ -243,7 +243,7 @@ const translations = {
 
 document.addEventListener('DOMContentLoaded', () => {
     let currentLang = localStorage.getItem('lang');
-    
+
     if (!currentLang) {
         const browserLang = navigator.language.slice(0, 2).toLowerCase();
         if (browserLang === 'fr' || browserLang === 'pt') {
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         localStorage.setItem('lang', currentLang);
     }
-    
+
     applyLanguage(currentLang);
 
     // Language switcher logic (Dropdown)
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (langDropdownBtn) {
         langDropdownBtn.innerText = currentLang.toUpperCase();
     }
-    
+
     document.querySelectorAll('.lang-option').forEach(option => {
         option.addEventListener('click', (e) => {
             e.preventDefault();
@@ -280,7 +280,7 @@ function applyLanguage(lang) {
     if (!dict) return;
 
     document.documentElement.lang = lang;
-    
+
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
