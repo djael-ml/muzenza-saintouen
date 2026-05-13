@@ -1,0 +1,16 @@
+{
+  "name": "Muzenza Saint-Ouen",
+  "short_name": "Muzenza",
+  "description": "Groupe de Capoeira Muzenza à Saint-Ouen. Cours enfants, ados et adultes.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#d00000",
+  "icons": [
+    {
+      "src": "assets/images/Grupo-Muzenza-Capoeira-Logo.webp",
+      "sizes": "192x192 512x512",
+      "type": "image/webp"
+    }
+  ]
+}
