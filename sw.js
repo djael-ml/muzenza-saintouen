@@ -1,8 +1,7 @@
 const CACHE_NAME = 'muzenza-cache-v2';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/infos.html',
+  '/infos',
   '/assets/css/style.min.css',
   '/assets/js/main.min.js',
   '/assets/js/i18n.js',
